@@ -53,3 +53,5 @@ dendrite.yaml
 
 # Generated code
 cmd/dendrite-demo-yggdrasil/embed/fs*.go
+
+cmd/sytest
