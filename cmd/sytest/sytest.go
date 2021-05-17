@@ -16,7 +16,7 @@ import (
 func main() {
 	err := exec.Command("git", "pull").Run()
 	if err != nil {
-		logrus.WithError(err).Fatalln("Run git fetch failed")
+		logrus.WithError(err).Fatalln("Run git pull failed")
 	}
 	logrus.Infoln("Git update done")
 	err = os.RemoveAll("./cmd/sytest/result")
