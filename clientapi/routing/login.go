@@ -66,13 +66,26 @@ func Login(
 		}
 	} else if req.Method == http.MethodPost {
 		typePassword := auth.LoginTypePassword{
-			GetAccountByPassword: accountDB.GetAccountByPassword,
-			Config:               cfg,
+			// GetAccountByPassword: accountDB.GetAccountByPassword,
+			Config: cfg,
 		}
 		r := typePassword.Request()
 		resErr := httputil.UnmarshalJSONRequest(req, r)
 		if resErr != nil {
 			return *resErr
+		}
+		switch r.(*auth.PasswordRequest).Identifier.Type {
+		case "m.id.user":
+			typePassword.GetAccountByPassword = accountDB.GetAccountByPassword
+		case "m.id.ldap":
+			typePassword.GetAccountByPassword = func(ctx context.Context, localpart, password string) (
+				*userapi.Account, error,
+			) {
+				// TODO:Add ldap login logic
+				return nil, nil
+			}
+		default:
+			typePassword.GetAccountByPassword = accountDB.GetAccountByPassword
 		}
 		login, authErr := typePassword.Login(req.Context(), r)
 		if authErr != nil {
