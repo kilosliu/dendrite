@@ -59,7 +59,7 @@ func main() {
 			cfg.Host)
 		to := []string{"all@workly.ai"}
 		content := []byte(fmt.Sprintf("From:%s\r\nTo:all@workly.ai\r\nSubject:Are We Synapse Yet?\r\nContent-Type:text/plain;charset=utf-8\r\n\r\n%s", cfg.Username, out))
-		err = sendMail(cfg.Host+cfg.Port, auth, cfg.Username, to, content)
+		err = sendMail(cfg.Host+":"+cfg.Port, auth, cfg.Username, to, content)
 		if err != nil {
 			logrus.WithError(err).Fatalln("Send mail failed")
 		}
