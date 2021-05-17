@@ -55,3 +55,4 @@ dendrite.yaml
 cmd/dendrite-demo-yggdrasil/embed/fs*.go
 
 cmd/sytest/config.json
+cmd/sytest/result
