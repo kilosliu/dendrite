@@ -42,6 +42,7 @@ func main() {
 	err = exec.Command("docker", "run", "--rm",
 		"-v", cfg.Src+":/src/",
 		"-v", cfg.Src+"cmd/sytest/result:/logs/",
+		"-e", "DENDRITE_TRACE_INTERNAL=1",
 		"matrixdotorg/sytest-dendrite").Run()
 	if err != nil {
 		logrus.WithError(err).Fatal("Run sytest docker image failed")
