@@ -19,6 +19,11 @@ func main() {
 		logrus.WithError(err).Fatal("Run git pull failed")
 	}
 	logrus.Info("Git update done")
+	err = exec.Command("go", "mod", "tidy").Run()
+	if err != nil {
+		logrus.WithError(err).Fatal("Run go mod tidy failed")
+	}
+	logrus.Info("go mod tidy done")
 	err = os.RemoveAll("./cmd/sytest/result")
 	if err != nil && !os.IsNotExist(err) {
 		logrus.WithError(err).Fatal("Remove old result failed")
@@ -41,8 +46,11 @@ func main() {
 	}
 	err = exec.Command("docker", "run", "--rm",
 		"-v", cfg.Src+":/src/",
-		"-v", cfg.Src+"cmd/sytest/result:/logs/",
+		"-v", cfg.Src+"cmd/sytest/result/:/logs/",
+		"-v", os.Getenv("GOPATH")+"/:/gopath",
 		"-e", "DENDRITE_TRACE_INTERNAL=1",
+		"-e", "DENDRITE_TRACE_HTTP=1",
+		"-e", "DENDRITE_TRACE_SQL=1",
 		"matrixdotorg/sytest-dendrite").Run()
 	if err != nil {
 		logrus.WithError(err).Fatal("Run sytest docker image failed")
